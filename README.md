@@ -39,7 +39,7 @@ Benefits:
 {
   "task_request": {
     "task_type": "syft",
-    "params": {"docker_image_id": "ubuntud" }
+    "params": {"docker_image_id": "ubuntu" }
   }
 }
 ```
