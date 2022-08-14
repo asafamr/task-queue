@@ -43,7 +43,9 @@ Benefits:
   }
 }
 ```
+* New task ID was returned
 * Use the "Get User Tasks" route to see the task update
+* When task is done goto minio console (url below) to get results by task id
 * Additional tools:
     * http://localhost:9001 Minio console - results uploaded to Minio on task done (user=pass=minio123)
     * http://localhost:8081 Mongo Express
