@@ -6,17 +6,17 @@
 A scalable and reliable task queue for Kubernetes.
 Scaling is done through Knative based autoscaling. Strong consistency is provided by MongoDB and used for recovery in case of failure.
 
-Currently only one task is aviavlble: extracting SBOM from a dockerhub image using Syft but new tasks can easily be added.
+Currently only one task is available: extracting SBOM from a dockerhub image using Syft but new tasks can easily be added.
 
-Task scheduling is done by [Celery](https://docs.celeryq.dev) with [Flower](flower.readthedocs.io) for metrics and manaual inspection. Celery workers currenlty have two "work" types: run tasks by hitting a Knative route and sync task status with the manager store.
+Task scheduling is done by [Celery](https://docs.celeryq.dev) with [Flower](flower.readthedocs.io) for metrics and manual inspection. Celery workers currently have two "work" types: run tasks by hitting a Knative route and sync task status with the manager store.
 
 Task HTTP requests are mapped 1-1 to pods through Knative concurrency setting and are kept open until a task is finished.
-The reuslts are then uploaded to an object store(MinIO).
+The results are then uploaded to an object store(MinIO).
 
 ### Design
-I chose this design following good experience with [GCP Cloud Tasks](https://cloud.google.com/tasks) and [GCP Cloud Run](https://cloud.google.com/run)
+I chose this design following good experiences with [GCP Cloud Tasks](https://cloud.google.com/tasks) and [GCP Cloud Run](https://cloud.google.com/run)
 
-Authentication should be done in cluster ingress and idenetity provided in header to task manager.
+Authentication should be done in cluster ingress and identity provided in header to task manager (unimplemented).
 
 Benefits:
 * Horizontally scalable - and fast to scale
@@ -27,7 +27,7 @@ Benefits:
 
 
 ### Running on a local K8S cluster with [Tilt](https://tilt.dev/)
-* Follow [Tilt installation instuctions](https://docs.tilt.dev/install.html)
+* Follow [Tilt installation instructions](https://docs.tilt.dev/install.html)
     
     * Knative Tilt integration required installing kourier in my machine (Ubuntu, microk8s). Hopefully these changes in `TiltKnative` should just work for you.
 
