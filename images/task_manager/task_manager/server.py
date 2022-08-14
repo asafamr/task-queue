@@ -1,9 +1,8 @@
-from fastapi import Body, FastAPI, Header
-from task_manager.artifacts import get_artifacts_client
-
-from task_manager.db import get_db_client
 import task_manager.routers.internal as router_inner
 import task_manager.routers.public as router_public
+from fastapi import Body, FastAPI, Header
+from task_manager.artifacts import get_artifacts_client
+from task_manager.db import get_db_client
 
 app = FastAPI()
 

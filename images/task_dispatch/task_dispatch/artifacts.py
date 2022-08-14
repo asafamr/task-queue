@@ -1,7 +1,9 @@
 import io
 import json
 import os
+
 from minio import Minio
+
 
 def upload_json_artifact(artifcat_name, obj):
     client = Minio(os.getenv("MINIO_URL"),

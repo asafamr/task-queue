@@ -1,8 +1,8 @@
 import datetime
 from typing import List
-from fastapi import APIRouter, Header, Request, Body
-from task_manager.artifacts import ArtifactsClient
 
+from fastapi import APIRouter, Body, Header, Request
+from task_manager.artifacts import ArtifactsClient
 from task_manager.db import DbClient
 from task_manager.models import Task, TaskRequest, TaskStatus
 

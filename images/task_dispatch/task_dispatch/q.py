@@ -4,14 +4,15 @@ import os
 import sys
 from typing import Dict, Optional
 
-from celery import Celery
-from celery.signals import setup_logging
-from celery.schedules import timedelta
 import requests
-
+from celery import Celery
+from celery.schedules import timedelta
+from celery.signals import setup_logging
 from task_dispatch.util import gen_batches
+
 from .artifacts import upload_json_artifact
-from .q_state import  get_all_task_statuses, is_task_existing, remove_tasks, set_tasks_status, try_global_lock
+from .q_state import (get_all_task_statuses, is_task_existing, remove_tasks,
+                      set_tasks_status, try_global_lock)
 
 app = Celery('task-dispatcher')
 

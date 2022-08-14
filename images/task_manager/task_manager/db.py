@@ -1,15 +1,15 @@
 
+import datetime
 import os
 from typing import Any, Dict, List, Optional
-import datetime
-from bson.objectid import ObjectId
 
 import pymongo
-
-from task_manager.models import Task, TaskStatus, TaskStatusUpdate
-from motor.motor_asyncio import AsyncIOMotorClient
+from bson.objectid import ObjectId
 from motor.core import AgnosticCollection
+from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo import UpdateOne
+from task_manager.models import Task, TaskStatus, TaskStatusUpdate
+
 
 async def get_db_client():
     mongo_client =  AsyncIOMotorClient(os.getenv('MONGO_URL', 'mongodb://mongo:27017'))

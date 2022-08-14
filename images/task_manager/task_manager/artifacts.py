@@ -1,9 +1,11 @@
 
 import asyncio
-from concurrent.futures import ThreadPoolExecutor
 import json
 import os
+from concurrent.futures import ThreadPoolExecutor
+
 from minio import Minio
+
 
 async def get_artifacts_client():
     executor = ThreadPoolExecutor()

@@ -1,7 +1,7 @@
 
-from fastapi import FastAPI, HTTPException, Body
-from .syft import ImageNotFound, extract_sbom_syft
+from fastapi import Body, FastAPI, HTTPException
 
+from .syft import ImageNotFound, extract_sbom_syft
 
 app = FastAPI()
 

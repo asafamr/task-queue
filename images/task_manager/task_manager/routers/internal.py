@@ -1,6 +1,6 @@
 from typing import List, Optional
-from fastapi import APIRouter, Request,Body
 
+from fastapi import APIRouter, Body, Request
 from task_manager.db import DbClient
 from task_manager.models import Task, TaskStatusUpdate
 
