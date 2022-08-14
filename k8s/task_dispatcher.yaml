@@ -1,0 +1,154 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dispatch-worker
+  labels:
+    app: dispatch-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dispatch-worker
+  template:
+    metadata:
+      labels:
+        app: dispatch-worker
+    spec:
+      containers:
+      - name: dispatch-worker
+        image: task_dispatch
+        env:
+          - name: CELERY_BROKER_URL
+            value: redis://redis:6379/0
+          - name: CELERY_RESULT_BACKEND
+            value: redis://redis:6379/1
+          - name: REDIS_URL
+            value: redis://redis:6379/2
+          - name: MINIO_URL
+            value: minio:9000
+          - name: HTTP_TASK_URL_TEMPLATE
+            value: 'http://task-svc-{task_type}.default.svc.cluster.local/run'
+          - name: MANAGER_URL
+            value: http://task-manager:8000
+        command:
+          - "bash"
+          - "run_worker.sh"
+        resources:
+          limits:
+            memory: "2Gi"
+            cpu: "500m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beat
+  labels:
+    app: beat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: beat
+  template:
+    metadata:
+      labels:
+        app: beat
+    spec:
+      containers:
+      - name: beat
+        image: task_dispatch
+        env:
+          - name: CELERY_BROKER_URL
+            value: redis://redis:6379/0
+          - name: CELERY_RESULT_BACKEND
+            value: redis://redis:6379/1
+        initialDelaySeconds: 20
+        periodSeconds: 20
+        command:
+          - "bash"
+          - "run_beat.sh" 
+        resources:
+          limits:
+            memory: "2Gi"
+            cpu: "500m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  labels:
+    app: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:7.0.4-alpine3.16
+        resources:
+          limits:
+            memory: "4Gi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+spec:
+  selector:
+    app: redis
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celery-flower
+  labels:
+    app: celery-flower
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: celery-flower
+  template:
+    metadata:
+      labels:
+        app: celery-flower
+    spec:
+      containers:
+      - name: celery-flower
+        image: task_dispatch
+        env:
+          - name: CELERY_BROKER_URL
+            value: redis://redis:6379/0
+          - name: CELERY_RESULT_BACKEND
+            value: redis://redis:6379/1
+        command:
+          - "bash"
+          - "run_flower.sh"
+        resources:
+          limits:
+            memory: "2Gi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: celery-flower
+spec:
+  selector:
+    app: celery-flower
+  ports:
+    - protocol: TCP
+      name: gui
+      port: 5566
+      targetPort: 5566

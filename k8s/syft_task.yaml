@@ -1,0 +1,25 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: task-svc-syft
+  labels:
+    app: task-svc-syft
+    networking.knative.dev/visibility: cluster-local
+spec:
+  traffic:
+    - latestRevision: true
+      percent: 100
+  template:
+    metadata:
+      labels:
+        app: task-svc-syft
+    spec:
+      containerConcurrency: 1
+      containers:
+      - name: syft-task
+        image: syft_task
+        command: 
+          - "bash"
+          - "run_server.sh"
+        ports:
+        - containerPort: 8000

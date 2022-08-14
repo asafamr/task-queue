@@ -1,0 +1,31 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Worker",
+            "type": "python",
+            "request": "launch",
+            "module": "celery",
+            "env": {
+                "MINIO_URL": "host.docker.internal:19000",
+                "CELERY_BROKER_URL": "redis://host.docker.internal:16379/0",
+                "CELERY_BACKEND_URL": "redis://host.docker.internal:16379/1",
+                "HTTP_TASK_URL_TEMPLATE": "http://host.docker.internal:20000/run",
+                "REDIS_URL": "redis://host.docker.internal:16379/2",
+                "MANAGER_URL": "http://host.docker.internal:18000"
+            },
+            "args": [
+                "-A",
+                "task_dispatch.q",
+                "worker",
+                "-B",
+                "--concurrency=1"
+            ],
+            "justMyCode": true
+        },
+    
+    ]
+}

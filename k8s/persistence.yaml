@@ -1,0 +1,85 @@
+# these should be replaced by managed alternative
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio
+  labels:
+    app: minio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minio
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      containers:
+      - name: minio
+        image: quay.io/minio/minio
+        env:
+          - name: MINIO_ROOT_USER
+            value: "minio123"
+          - name: MINIO_ROOT_PASSWORD
+            value: "minio123"
+        command: 
+          - sh
+          - "-c"
+          - |
+            mkdir /data/artifacts &&
+            minio server /data --console-address :9001
+        
+        resources:
+          limits:
+            memory: "1Gi"
+            cpu: "300m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio
+spec:
+  selector:
+    app: minio
+  ports:
+    - protocol: TCP
+      name: main
+      port: 9000
+      targetPort: 9000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo
+  labels:
+    app: mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+      - name: mongo
+        image: mongo:5.0.10
+        resources:
+          limits:
+            memory: "1Gi"
+            cpu: "300m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+spec:
+  selector:
+    app: mongo
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
