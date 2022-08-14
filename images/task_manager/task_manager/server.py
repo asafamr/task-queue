@@ -6,9 +6,11 @@ from task_manager.db import get_db_client
 
 app = FastAPI()
 
+
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
+
 
 app.include_router(
     router_inner.router,
@@ -19,6 +21,7 @@ app.include_router(
     router_public.router,
     prefix="/v1/public",
 )
+
 
 @app.on_event("startup")
 async def init_app():

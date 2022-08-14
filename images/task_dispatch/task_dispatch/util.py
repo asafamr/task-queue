@@ -1,4 +1,3 @@
-
 def gen_batches(iterable, batch_size=1000):
     batch = []
     for x in iterable:
